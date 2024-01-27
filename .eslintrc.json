@@ -1,0 +1,10 @@
+{
+    "extends": [
+      "@rocketseat/eslint-config/next"
+    ],
+    "rules": {
+      "camelcase": "off",
+      "no-useless-constructor": "off"
+    }
+}
+ 

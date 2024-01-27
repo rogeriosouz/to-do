@@ -1,0 +1,33 @@
+{
+  "name": "to-do",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build",
+    "migrate:generate": "drizzle-kit generate:pg --config=./drizzle.config.ts",
+    "migrate:run": "tsx src/db/migrate.ts",
+    "studio": "drizzle-kit studio"
+  },
+  "devDependencies": {
+    "@rocketseat/eslint-config": "2.1.0",
+    "@types/node": "20.11.7",
+    "@types/pg": "8.11.0",
+    "@typescript-eslint/eslint-plugin": "6.19.1",
+    "@typescript-eslint/parser": "6.19.1",
+    "drizzle-kit": "0.20.13",
+    "eslint": "8.56.0",
+    "typescript": "5.3.3"
+  },
+  "dependencies": {
+    "dotenv": "16.4.1",
+    "drizzle-orm": "0.29.3",
+    "fastify": "4.25.2",
+    "pg": "8.11.3",
+    "postgres": "3.4.3",
+    "tsx": "4.7.0",
+    "zod": "3.22.4"
+  }
+}
