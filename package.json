@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "2.1.0",
+    "@types/bcrypt": "5.0.2",
     "@types/node": "20.11.7",
     "@types/pg": "8.11.0",
     "@typescript-eslint/eslint-plugin": "6.19.1",
@@ -22,6 +23,8 @@
     "typescript": "5.3.3"
   },
   "dependencies": {
+    "@fastify/jwt": "8.0.0",
+    "bcrypt": "5.1.1",
     "dotenv": "16.4.1",
     "drizzle-orm": "0.29.3",
     "fastify": "4.25.2",
