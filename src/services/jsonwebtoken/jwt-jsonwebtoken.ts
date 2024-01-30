@@ -4,11 +4,11 @@ import jwt from 'jsonwebtoken'
 export class JwtJsonwebtokenService implements JwtService {
   async verify({ jwtToken, secret }: VerifyTypeRequest) {
     try {
-      jwt.verify(jwtToken, secret)
+      const token = jwt.verify(jwtToken, secret) as { userId: string }
 
-      return true
+      return { userId: token.userId }
     } catch (error) {
-      return false
+      return null
     }
   }
 

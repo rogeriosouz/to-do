@@ -6,6 +6,22 @@ import { eq } from 'drizzle-orm'
 type UserInsert = typeof users.$inferInsert
 
 export class UsersDrizzleRepository implements UsersRepository {
+  async updatePassword(passwordHash: string) {
+    const user = await db.update(users).set({ passwordHash }).returning()
+
+    return user[0]
+  }
+
+  async findById(id: string) {
+    const isUserById = await db.select().from(users).where(eq(users.id, id))
+
+    if (isUserById.length >= 1) {
+      return isUserById[0]
+    }
+
+    return null
+  }
+
   async findByEmail(email: string) {
     const isUserByEmail = await db
       .select()

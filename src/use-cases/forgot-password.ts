@@ -24,7 +24,7 @@ export class ForgotPasswordUseCase {
 
     const { jwt } = await this.jwtService.create({
       payload: { userId: isUserByEmail.id },
-      config: { expiresIn: '1h' },
+      config: { expiresIn: '10m' },
       secret: env.JWT_SECRET_EMAIL_SERVICE,
     })
 

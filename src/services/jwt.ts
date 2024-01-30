@@ -18,5 +18,8 @@ export interface JwtService {
     config,
   }: CreateTypeRequest): Promise<{ jwt: string }>
 
-  verify({ jwtToken, secret }: VerifyTypeRequest): Promise<boolean>
+  verify({
+    jwtToken,
+    secret,
+  }: VerifyTypeRequest): Promise<{ userId: string } | null>
 }
