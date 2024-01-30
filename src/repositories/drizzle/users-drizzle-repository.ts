@@ -6,8 +6,12 @@ import { eq } from 'drizzle-orm'
 type UserInsert = typeof users.$inferInsert
 
 export class UsersDrizzleRepository implements UsersRepository {
-  async updatePassword(passwordHash: string) {
-    const user = await db.update(users).set({ passwordHash }).returning()
+  async updatePassword(userId: string, passwordHash: string) {
+    const user = await db
+      .update(users)
+      .set({ passwordHash })
+      .where(eq(users.id, userId))
+      .returning()
 
     return user[0]
   }

@@ -7,5 +7,5 @@ export interface UsersRepository {
   findByEmail(email: string): Promise<User | null>
   findById(id: string): Promise<User | null>
   create(userCreateData: UserInsert): Promise<User>
-  updatePassword(passwordHash: string): Promise<User>
+  updatePassword(userId: string, passwordHash: string): Promise<User>
 }
