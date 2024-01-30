@@ -1,11 +1,11 @@
-import { RegisterRepository } from '../register-repository'
+import { UsersRepository } from '../users-repository'
 import { db } from '../../db/connection'
 import { users } from '../../db/schema'
 import { eq } from 'drizzle-orm'
 
 type UserInsert = typeof users.$inferInsert
 
-export class RegisterDrizzleRepository implements RegisterRepository {
+export class UsersDrizzleRepository implements UsersRepository {
   async findByEmail(email: string) {
     const isUserByEmail = await db
       .select()
@@ -13,10 +13,10 @@ export class RegisterDrizzleRepository implements RegisterRepository {
       .where(eq(users.email, email))
 
     if (isUserByEmail.length >= 1) {
-      return true
+      return isUserByEmail[0]
     }
 
-    return false
+    return null
   }
 
   async create(userCreateData: UserInsert) {

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { app } from '../../app'
+import { JwtJsonwebtokenService } from '../../services/jsonwebtoken/jwt-jsonwebtoken'
+import { env } from '../../env'
 
 export async function authMiddleware(
   request: FastifyRequest,
@@ -15,11 +16,13 @@ export async function authMiddleware(
 
   const authToken = isCookieToken.replace('authUser=', '')
 
-  try {
-    const isTokenValid = app.jwt.verify(authToken)
-    console.log(isTokenValid)
-  } catch (error) {
-    console.log(error)
+  const jwtJsonwebtokenService = new JwtJsonwebtokenService()
+  const isTokenValid = jwtJsonwebtokenService.verify({
+    jwtToken: authToken,
+    secret: env.JWT_SECRET,
+  })
+
+  if (!isTokenValid) {
     return reply.status(401).send({
       message: 'token invalid',
     })

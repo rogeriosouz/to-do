@@ -1,7 +1,8 @@
 import { compare } from 'bcrypt'
-import { AuthenticationRepository } from '../repositories/authentication-repository'
 import { InvalidCredentialsError } from './errors/InvalidCredentialsError'
-import { app } from '../app'
+import { UsersRepository } from '../repositories/users-repository'
+import { JwtService } from '../services/jwt'
+import { env } from '../env'
 
 interface AuthenticationUseCaseRequest {
   email: string
@@ -9,10 +10,13 @@ interface AuthenticationUseCaseRequest {
 }
 
 export class AuthenticationUseCase {
-  constructor(private authenticationRepository: AuthenticationRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private jwtService: JwtService,
+  ) {}
 
   async execute({ email, password }: AuthenticationUseCaseRequest) {
-    const user = await this.authenticationRepository.findByEmail(email)
+    const user = await this.usersRepository.findByEmail(email)
 
     if (!user) {
       throw new InvalidCredentialsError()
@@ -30,13 +34,15 @@ export class AuthenticationUseCase {
       email: user.email,
     }
 
-    const token = app.jwt.sign(payloadJwt, {
-      expiresIn: '6d',
+    const { jwt } = await this.jwtService.create({
+      payload: payloadJwt,
+      secret: env.JWT_SECRET,
+      config: { expiresIn: '6d' },
     })
 
     return {
       user: payloadJwt,
-      token,
+      jwt,
     }
   }
 }

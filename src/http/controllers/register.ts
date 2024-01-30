@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { RegisterUseCase } from '../../use-cases/register'
 import { UserAlreadyExistsError } from '../../use-cases/errors/UserAlreadyExistsError'
 import { z } from 'zod'
-import { RegisterDrizzleRepository } from '../../repositories/drizzle/register-drizzle-repository'
+import { UsersDrizzleRepository } from '../../repositories/drizzle/users-drizzle-repository'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const schemaCreateUser = z.object({
@@ -14,8 +14,8 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const { name, email, password } = schemaCreateUser.parse(request.body)
 
   try {
-    const registerDrizzleRepository = new RegisterDrizzleRepository()
-    const registerUseCase = new RegisterUseCase(registerDrizzleRepository)
+    const usersDrizzleRepository = new UsersDrizzleRepository()
+    const registerUseCase = new RegisterUseCase(usersDrizzleRepository)
 
     await registerUseCase.execute({
       name,

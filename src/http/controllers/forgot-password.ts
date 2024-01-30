@@ -1,42 +1,38 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { UsersDrizzleRepository } from '../../repositories/drizzle/users-drizzle-repository'
-import { AuthenticationUseCase } from '../../use-cases/authentication'
 import { InvalidCredentialsError } from '../../use-cases/errors/InvalidCredentialsError'
+import { EmailNodemailerService } from '../../services/nodemailer/email-nodemailer'
+import { ForgotPasswordUseCase } from '../../use-cases/forgot-password'
 import { JwtJsonwebtokenService } from '../../services/jsonwebtoken/jwt-jsonwebtoken'
 
-export async function login(request: FastifyRequest, reply: FastifyReply) {
-  const schemaCreateUser = z.object({
+export async function forgotPassword(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const schemaForgotPassword = z.object({
     email: z.string().email(),
-    password: z.string().min(4),
   })
 
-  const { email, password } = schemaCreateUser.parse(request.body)
+  const { email } = schemaForgotPassword.parse(request.body)
 
   try {
     const usersDrizzleRepository = new UsersDrizzleRepository()
+    const emailNodemailerService = new EmailNodemailerService()
     const jwtJsonwebtokenService = new JwtJsonwebtokenService()
-    const authenticationUseCase = new AuthenticationUseCase(
+
+    const forgotPasswordUseCase = new ForgotPasswordUseCase(
       usersDrizzleRepository,
+      emailNodemailerService,
       jwtJsonwebtokenService,
     )
 
-    const { user, jwt } = await authenticationUseCase.execute({
-      email,
-      password,
-    })
+    await forgotPasswordUseCase.execute({ email })
 
-    const cookie = `authUser=${jwt}; HttpOnly; Secure; SameSite=None; Path=/`
-
-    return reply
-      .status(200)
-      .headers({
-        'set-cookie': cookie,
-      })
-      .send({
-        message: 'Success authenticated user',
-        user,
-      })
+    return {
+      message:
+        'an email has been sent to you with instructions to reset your password',
+    }
   } catch (err) {
     if (err instanceof InvalidCredentialsError) {
       return reply.status(400).send({ message: err.message })
