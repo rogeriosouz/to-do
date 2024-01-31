@@ -6,7 +6,7 @@ export const tasks = pgTable('tasks', {
   id: uuid('id')
     .default(sql`gen_random_uuid()`)
     .primaryKey(),
-  title: varchar('title'),
+  title: varchar('title').unique(),
   content: varchar('content'),
   ownerId: uuid('owner_id')
     .notNull()
