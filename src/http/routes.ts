@@ -5,16 +5,16 @@ import { forgotPassword } from './controllers/forgot-password'
 import { recoverPassword } from './controllers/recover-password'
 import { createTask } from './controllers/create-task'
 import { authMiddleware } from './middlewares/auth'
+import { listTasks } from './controllers/list-tasks'
 
 export async function appRoutes(app: FastifyInstance) {
-  //  auth
+  // auth
   app.post('/auth/login', login)
   app.post('/auth/register', register)
   app.post('/auth/forgot-password', forgotPassword)
   app.patch('/auth/recover-password', recoverPassword)
 
   // tasks
-
-  app.addHook('preHandler', authMiddleware)
-  app.post('/tasks', createTask)
+  app.get('/tasks', { preHandler: authMiddleware }, listTasks)
+  app.post('/tasks', { preHandler: authMiddleware }, createTask)
 }
