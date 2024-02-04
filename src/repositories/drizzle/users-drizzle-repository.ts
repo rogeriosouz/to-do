@@ -1,4 +1,4 @@
-import { UsersRepository } from '../users-repository'
+import { DataUpdateUser, UsersRepository } from '../users-repository'
 import { db } from '../../db/connection'
 import { users } from '../../db/schema'
 import { eq } from 'drizzle-orm'
@@ -6,6 +6,10 @@ import { eq } from 'drizzle-orm'
 type UserInsert = typeof users.$inferInsert
 
 export class UsersDrizzleRepository implements UsersRepository {
+  async update(id: string, dataUpdateUser: DataUpdateUser) {
+    await db.update(users).set(dataUpdateUser).where(eq(users.id, id))
+  }
+
   async updatePassword(userId: string, passwordHash: string) {
     const user = await db
       .update(users)
