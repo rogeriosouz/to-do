@@ -9,6 +9,10 @@ import { tasks } from '../../db/schema'
 import { eq, and, like } from 'drizzle-orm'
 
 export class TasksDrizzleRepository implements TasksRepository {
+  async delete(id: string) {
+    await db.delete(tasks).where(eq(tasks.id, id))
+  }
+
   async update(id: string, data: DataUpdateTask) {
     if (data.content && data.title) {
       await db.update(tasks).set(data).where(eq(tasks.id, id))

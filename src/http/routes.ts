@@ -7,6 +7,7 @@ import { createTask } from './controllers/create-task'
 import { authMiddleware } from './middlewares/auth'
 import { listTasks } from './controllers/list-tasks'
 import { updateTask } from './controllers/update-task'
+import { deleteTask } from './controllers/delete-task'
 
 export async function appRoutes(app: FastifyInstance) {
   // auth
@@ -19,4 +20,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/tasks', { preHandler: authMiddleware }, listTasks)
   app.post('/tasks', { preHandler: authMiddleware }, createTask)
   app.put('/tasks/:id', { preHandler: authMiddleware }, updateTask)
+  app.delete('/tasks/:id', { preHandler: authMiddleware }, deleteTask)
 }

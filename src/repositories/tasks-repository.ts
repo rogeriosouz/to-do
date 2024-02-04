@@ -32,4 +32,5 @@ export interface TasksRepository {
   findByTitle(title: string): Promise<Task | null>
   create(taskData: TaskInsert): Promise<Task>
   update(id: string, data: DataUpdateTask): Promise<void>
+  delete(id: string): Promise<void>
 }
