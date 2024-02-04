@@ -16,6 +16,11 @@ type FindAllTasksResponse = {
   totalPages: number
 }
 
+export type DataUpdateTask = {
+  content: string | null
+  title: string | null
+}
+
 export interface TasksRepository {
   findAllTasks({
     ownerId,
@@ -23,6 +28,8 @@ export interface TasksRepository {
     pageSize,
     search,
   }: FindAllTasksRequest): Promise<FindAllTasksResponse>
+  findById(id: string): Promise<Task | null>
   findByTitle(title: string): Promise<Task | null>
   create(taskData: TaskInsert): Promise<Task>
+  update(id: string, data: DataUpdateTask): Promise<void>
 }

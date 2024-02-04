@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { TasksDrizzleRepository } from '../../repositories/drizzle/tasks-drizzle-repository'
 import { ListTasksUseCase } from '../../use-cases/list-tasks'
 import { CustomAuthMiddlewareFastifyRequest } from '../middlewares/auth'
+import { env } from '../../env'
 
 export async function listTasks(request: CustomAuthMiddlewareFastifyRequest) {
   const schemaForgotPassword = z.object({
@@ -27,7 +28,9 @@ export async function listTasks(request: CustomAuthMiddlewareFastifyRequest) {
 
     return tasks
   } catch (err) {
-    console.log(err)
+    if (env.NODE_ENV === 'dev') {
+      console.log(err)
+    }
     throw err
   }
 }
